@@ -18,20 +18,20 @@
 
 %% --- Packages ---
 \usepackage[margin=1in]{geometry}
-\usepackage{times}
-\usepackage{setspace}
+\usepackage{mathptmx}        % Times New Roman (replaces deprecated 'times')
 \usepackage{fancyhdr}
 \usepackage{titlesec}
 \usepackage{enumitem}
 \usepackage{booktabs}
 \usepackage{tabularx}
-\usepackage{array}
-\usepackage[skip=4pt plus1pt, indent=0pt]{parskip}
 \usepackage{microtype}
-\usepackage{xcolor}
 \usepackage[hidelinks]{hyperref}
 \usepackage{amsmath}
 \usepackage{natbib}
+
+%% --- Paragraph style: standard indentation, no extra inter-paragraph space ---
+\setlength{\parindent}{1em}
+\setlength{\parskip}{0pt}
 
 %% --- Page style ---
 \pagestyle{fancy}
@@ -42,14 +42,14 @@
 \renewcommand{\headrulewidth}{0.4pt}
 
 %% --- Section formatting ---
-\titleformat{\section}{\normalfont\large\bfseries}{\thesection}{1em}{}
-\titleformat{\subsection}{\normalfont\normalsize\bfseries}{\thesubsection}{1em}{}
-\titlespacing*{\section}{0pt}{10pt}{4pt}
-\titlespacing*{\subsection}{0pt}{8pt}{2pt}
+\titleformat{\section}{\normalfont\large\bfseries}{\thesection}{0.75em}{}
+\titleformat{\subsection}{\normalfont\normalsize\bfseries}{\thesubsection}{0.75em}{}
+\titlespacing*{\section}{0pt}{12pt plus 2pt minus 2pt}{4pt}
+\titlespacing*{\subsection}{0pt}{8pt plus 2pt minus 1pt}{2pt}
 
 %% --- List formatting ---
-\setlist[itemize]{noitemsep, topsep=2pt, leftmargin=*}
-\setlist[enumerate]{noitemsep, topsep=2pt, leftmargin=*}
+\setlist[itemize]{noitemsep, topsep=3pt, partopsep=0pt, leftmargin=1.5em}
+\setlist[enumerate]{noitemsep, topsep=3pt, partopsep=0pt, leftmargin=1.5em}
 
 %% --- Macros ---
 \newcommand{\copiname}{[Co-PI Name, Title, Institution]}
@@ -62,9 +62,10 @@
 %% PROJECT SUMMARY (1 page maximum)
 %% =============================================================================
 \begin{center}
-  {\large\bfseries Project Summary}\\[4pt]
+  {\large\bfseries Project Summary}\\[3pt]
   {\normalsize\bfseries \nsftitle}
 \end{center}
+\vspace{4pt}
 
 \subsection*{Overview}
 
