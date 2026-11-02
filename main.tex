@@ -26,7 +26,7 @@
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{array}
-\usepackage{parskip}
+\usepackage[skip=4pt plus1pt, indent=0pt]{parskip}
 \usepackage{microtype}
 \usepackage{xcolor}
 \usepackage[hidelinks]{hyperref}
@@ -55,11 +55,12 @@
 \newcommand{\copiname}{[Co-PI Name, Title, Institution]}
 \newcommand{\nsftitle}{NSF TTP-T: Authority-Ranked Arbitration Governance for Organizational AI Agents}
 
+\begin{document}
+\thispagestyle{fancy}
+
 %% =============================================================================
 %% PROJECT SUMMARY (1 page maximum)
 %% =============================================================================
-
-\thispagestyle{fancy}
 \begin{center}
   {\large\bfseries Project Summary}\\[4pt]
   {\normalsize\bfseries \nsftitle}
@@ -171,7 +172,7 @@ Even a well-designed resolution trace is useful only if human compliance reviewe
 \noindent\textbf{Table 1. Project Milestones}
 
 \vspace{4pt}
-\begin{tabularx}{\textwidth}{Xccl}
+\begin{tabularx}{\textwidth}{Xccc}
 \toprule
 \textbf{Deliverable} & \textbf{Aim} & \textbf{Year / Qtr} & \textbf{Type} \\
 \midrule
