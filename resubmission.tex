@@ -1,0 +1,83 @@
+%% Resubmission Change Description (Single Copy Document)
+%% NSF 25-540 TTP-T  |  Prior award: #2612868
+%% Maximum 2 pages. Submit as a Single Copy Document.
+%%
+%% INSTRUCTIONS TO CHIRAG:
+%%   Replace §[X.X] references below with actual section numbers once confirmed.
+%%   Research Motivation = §1, Development of Solutions = §2, Project Team = §3.
+
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{times}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\small NSF TTP-T Resubmission Change Description}
+\rhead{\small Shah, University of Washington}
+\cfoot{\small \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\setlist[itemize]{noitemsep, topsep=2pt, leftmargin=*}
+
+\begin{document}
+
+\begin{center}
+  {\large\bfseries Resubmission Change Description}\\[4pt]
+  {\normalsize Prior Award: NSF TTP-T \#2612868 --- Solicitation: NSF 25-540}
+\end{center}
+
+\noindent This document describes the principal changes from the prior submission (declined after the first review cycle) to the current resubmission. Changes address reviewer feedback and reflect substantive scientific development since the original submission.
+
+\bigskip
+\noindent\textbf{1. Change of Central Research Concept (Entire Proposal)}
+
+The prior submission proposed Aria, a privacy-preserving personal AI assistant. The present submission replaces that concept entirely with an authority-ranked arbitration governance layer for organizational AI agents. The governance-layer concept is scientifically distinct from Aria: it shifts the problem from personal privacy to organizational policy compliance, from on-device personal data to organizational policy documents, and from individual user assistance to multi-agent governance. The governance layer is the primary vehicle for translating the Sims framework's authority-arbitration results --- results that have accumulated since the prior submission --- into a technology that organizations can deploy and audit.
+
+This change is not a refinement; it is a replacement. None of the Aria system architecture, Aria-specific research questions, or Aria evaluation scenarios appear in the current proposal. The Sims framework (Simulated Individual Memory Surrogates) and the SimBench benchmark are retained as the empirical and technical foundation, but extended from individual personalization to organizational governance.
+
+\bigskip
+\noindent\textbf{2. New Empirical Foundation (§1.2, §2.1--§2.4)}
+
+The prior submission projected Sims results. The current submission reports released results from three years of Sims research: on the publicly released 47-task SimBench benchmark, typed Sims with authority arbitration outperformed preference retrieval by 0.14--0.21 in preference adherence across three model families ($p < 0.001$); removing the arbitration mechanism reduced performance by up to 0.21, isolating the mechanism's contribution. These results motivate the four research aims and provide a specific, quantified baseline against which Aims~1--4 extend the framework.
+
+\bigskip
+\noindent\textbf{3. New Research Aims Structure (§2)}
+
+The prior submission's aims were structured around Aria system development and user adoption. The current aims address the specific open questions that translation of the governance layer requires: (1) policy-rule authoring from real organizational documents (new); (2) adversarial testing of the hard-constraint invariant, led by the co-PI in adversarial machine learning (new); (3) a within-subjects human-subjects study of compliance reviewer utility (new); and (4) SimBench v2 construction and $\tau$-bench replication (substantially extended from the prior benchmark aim). Each aim has explicit fallback criteria and indicators.
+
+\bigskip
+\noindent\textbf{4. New Organizational Partner: WSOSF (§3.5)}
+
+The prior submission proposed enterprise pilot partners. The current submission replaces those with the Washington State Opportunity Scholarship Foundation (WSOSF), a non-profit scholarship program serving underrepresented STEM students in Washington State. WSOSF provides a concrete policy environment (scholarship eligibility rules, privacy requirements, support guidelines), domain-expert validation for SimBench v2, compliance reviewer study participants, and a supervised pilot in which staff review all agent outputs. This partner was selected to avoid the reviewer concern (prior submission) that enterprise partners introduce commercial conflicts; WSOSF is a public-interest organization with no commercial stake in the outcome.
+
+\bigskip
+\noindent\textbf{5. New Co-PI: Adversarial Machine Learning (§3.2)}
+
+The prior submission did not include a co-PI with adversarial ML expertise. The current submission adds a co-PI [name to be confirmed] whose research focuses on adversarial machine learning and AI security to lead Aim~2. This addition directly addresses a gap identified in prior review feedback regarding the rigor of the invariant-testing methodology.
+
+\bigskip
+\noindent\textbf{6. Removal of Personnel No Longer on the Project}
+
+Steve Magennis and Ross Shabalin, who appeared in the prior submission, are not on the current project team. The team has been reconstituted around the governance-layer concept: PI Shah (Aims~1,~4), co-PI [name] (Aim~2), a postdoctoral researcher to be recruited (Aim~3), and GRA Harshita Chopra (I-Corps Entrepreneurial Lead).
+
+\bigskip
+\noindent\textbf{7. Strengthened Translation Plan: I-Corps and AMD (§3.4, §3.5, §4.4)}
+
+The prior submission's translation plan relied primarily on a licensing pathway. The current submission adds two additional translation routes: (a) NSF I-Corps ($50K in the project budget, GRA Harshita Chopra as Entrepreneurial Lead) for systematic customer discovery; and (b) AMD (NSF-Catalyst Partner) providing deployment guidance, hardware security consultation, and a connection to industry responsible-AI governance working groups for the resolution trace format standard. These additions reduce single-point-of-failure risk in the commercialization pathway.
+
+\bigskip
+\noindent\textbf{8. COI Disclosure Added: VersarAI (§3.6, Project Summary)}
+
+The prior submission did not include an explicit COI disclosure regarding VersarAI, Inc. The current submission adds a dedicated COI section (\S3.6) and a reference in the Project Summary disclosing that VersarAI holds a license to the pending UW CoMotion patent and that Dr.\ Shah holds an 80\% ownership stake. VersarAI is not a project partner and receives no project funds. A COI management plan is submitted as a Single Copy Document.
+
+\bigskip
+\noindent\textbf{9. Open Benchmark and Trace Format Standard (§4.2)}
+
+The prior submission proposed releasing Aria system components. The current submission replaces that with two new community artifacts: SimBench v2 ($\sim$130 human-validated tasks, CC-BY~4.0) --- the first benchmark specifically for policy compliance in multi-agent systems --- and a resolution trace format specification aligned with NIST AI~RMF~1.0 and EU AI Act Article~12, to be submitted to IEEE and ISO governance working groups by Year~3.
+
+\end{document}
