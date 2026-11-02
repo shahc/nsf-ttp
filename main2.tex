@@ -1,0 +1,992 @@
+\documentclass[11pt]{article}
+
+% Page setup per NSF requirements
+\usepackage[margin=1in]{geometry}
+\usepackage{times}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+
+% Section formatting
+\titleformat{\section}{\normalfont\Large\bfseries}{\thesection.}{1em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalfont\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+% Comments for drafting (remove for final)
+\newcommand{\TODO}[1]{\textcolor{red}{[TODO: #1]}}
+\newcommand{\NOTE}[1]{\textcolor{blue}{[NOTE: #1]}}
+\newcommand{\CITE}[1]{\textcolor{orange}{[CITE: #1]}}
+
+% Header/Footer
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{NSF TTP-T: Aria}
+\lhead{Project Description}
+\rfoot{Page \thepage}
+
+\begin{document}
+
+
+\thispagestyle{empty}
+\section*{PROJECT SUMMARY}
+
+\subsection*{Overview}
+
+Contemporary AI-powered personal assistants require users to surrender sensitive data to cloud infrastructure in exchange for personalization---a trade-off that excludes privacy-conscious consumers and prevents deployment in regulated industries bound by HIPAA, GDPR, and similar frameworks. This project translates foundational research in privacy-preserving machine learning into Aria, a commercial personal AI assistant delivering sophisticated, multi-context personalization while processing all data exclusively on-device.
+
+Aria's core innovation is \textbf{Sims Technology}: dynamic digital representations modeling user preferences across distinct life contexts (professional, personal, family, health) without transmitting data to external servers. Each ``Sim'' encodes preferences and behavioral patterns for a specific domain, automatically activating based on detected context---eliminating rather than managing the privacy-personalization trade-off.
+
+The project targets privacy-conscious consumers, enterprises in regulated industries (healthcare, legal, financial services) requiring compliant AI tools, and device manufacturers seeking privacy-differentiated capabilities. The intelligent virtual assistant market is projected to reach \$14--80 billion by 2030. A provisional patent was filed in 2025, and NSF I-Corps customer discovery has validated market demand. Translation outcomes include a market-ready mobile application, startup formation (NxTAGE), strategic partnerships, and positioning for SBIR/STTR and venture funding.
+
+\subsection*{Intellectual Merit}
+
+This project advances knowledge in on-device machine learning, privacy-preserving personalization, and multi-context user modeling through four technical challenges. First, achieving AI personalization within mobile constraints requires novel combinations of model compression with parameter-efficient fine-tuning; we extend Low-Rank Adaptation (LoRA) for continuous on-device learning with sub-500ms latency and sub-2GB memory footprint. Second, multi-context persona synthesis demands new approaches to automatic context detection; we develop hierarchical state machines leveraging multi-modal sensor fusion to achieve $>$85\% context accuracy. Third, privacy-preserving personalization requires formal guarantees against data extraction; we implement differential privacy with hardware-level protection through ARM TrustZone Trusted Execution Environments. Fourth, building user trust necessitates transparency mechanisms that are technically rigorous yet user-comprehensible; we validate these through iterative human-subjects studies. The project produces validated algorithms, open-source privacy frameworks, and empirical findings on trust-building in privacy-focused AI.
+
+\subsection*{Broader Impacts}
+
+The project generates economic, societal, and educational benefits. Startup formation will create 5--10 high-skilled positions within three years, with growth to 25--50 employees within five years. The technology can shift the personal AI market toward privacy-respecting alternatives and enable AI assistance in sensitive domains---healthcare, legal, financial planning---where privacy concerns currently limit adoption. Societally, Aria empowers users to maintain control over their digital footprint, contributing to rebuilding public trust in AI systems.
+
+Educationally, one PhD student (Years 1--3) and one postdoctoral researcher (Years 2--3) will gain experience in technology commercialization through I-Corps training and mentorship from industry advisors with experience at Microsoft, Amazon, Accenture, and Boeing. Multiple undergraduate and master's students will contribute through Capstone projects, gaining exposure to the complete innovation lifecycle. The project maintains commitment to broadening participation through targeted recruitment and diverse user studies. Open-source components will be available for educational use at other institutions.
+
+\newpage
+
+\setcounter{page}{1}
+
+%\begin{center}
+%{\bf \Large {NSF TTP-T: Aria -- Privacy-Preserving Personal AI \\
+% Assistant Using Sims Technology}\\
+%\large{Project Description}
+%}
+%\end{center}
+
+\section{Executive Summary}
+\label{sec:summary}
+\vspace*{-12pt}
+\subsection{Identification of Drivers}\vspace*{-8pt}
+
+Contemporary AI-powered personal assistants require users to surrender sensitive data to cloud infrastructure in exchange for personalization---a trade-off that creates significant adoption barriers. Studies indicate that approximately 60\% of voice assistant users express privacy concerns, while nearly half remain unaware that devices continuously monitor ambient audio \cite{edu2021security, li2023security}. This privacy-personalization paradox excludes entire market segments: privacy-conscious consumers avoid existing solutions, and organizations in regulated industries cannot deploy cloud-dependent assistants due to compliance requirements under HIPAA, GDPR, and similar frameworks.
+
+Translation is needed because no commercial solution currently delivers meaningful personalization while guaranteeing complete data sovereignty. The intelligent virtual assistant market, projected to reach \$14--80 billion by 2030 at 24\%+ CAGR \cite{grandview2023iva}, presents substantial opportunity for solutions that resolve this fundamental tension.
+
+\vspace*{-10pt}
+\subsection{The Innovation}
+\vspace*{-8pt}
+Aria introduces \textbf{Sims Technology}---dynamic digital representations that model user preferences across distinct life contexts while processing all data exclusively on-device. The term ``Sims'' derives from ``simulations'' of the user's contextual self: each Sim is a lightweight, structured representation encoding preferences, communication style, and behavioral patterns for a specific life domain (e.g., professional work, family interactions, health management). Unlike static user profiles, Sims capture the insight that people present different facets of themselves across contexts. Each Sim comprises a preference vector for language model fine-tuning, a context activation profile, and privacy boundaries---all constructed through on-device data fusion, evolving continuously through interaction while remaining under user control.
+
+Three technical innovations enable this capability. First, \textbf{on-device personalization} leverages Low-Rank Adaptation (LoRA), reducing trainable parameters by approximately 10,000-fold \cite{hu2022lora}, enabling model adaptation within mobile constraints. Second, \textbf{multi-context persona synthesis} employs sensor fusion achieving $>$90\% context detection accuracy \cite{wang2019deep} to automatically select appropriate behavioral models. Third, \textbf{privacy-preserving architecture} implements differential privacy guarantees \cite{abadi2016deep} with hardware-level protection through ARM TrustZone \cite{pinto2019demystifying}.
+
+This approach eliminates rather than manages the privacy-personalization trade-off---Aria ensures sensitive information never leaves the device, enabling deployment in contexts where existing solutions cannot operate.
+
+\vspace*{-10pt}
+\subsection{The Value Proposition}
+\vspace*{-8pt}
+Aria delivers differentiated value across three stakeholder groups. \textit{Privacy-conscious consumers} gain AI assistance matching cloud-based alternatives without data exposure. \textit{Enterprises in regulated industries} can deploy AI productivity tools previously prohibited by compliance requirements. \textit{Device manufacturers} obtain licensing opportunities for privacy-differentiated AI capabilities as hardware commoditization intensifies.
+
+The key differentiator is \textbf{complete on-device processing with multi-context awareness}---no competitor combines these capabilities. Differentiation is measured through: (1) technical benchmarks comparing personalization quality against cloud-based alternatives; (2) user trust metrics validated through longitudinal studies; and (3) market validation demonstrating enterprise adoption in previously inaccessible regulated sectors. Societal value extends beyond commercial outcomes: by demonstrating viable alternatives to surveillance-based AI, Aria contributes to rebuilding public trust in AI systems \cite{gillespie2023trust}.
+
+A provisional patent application was filed in 2025 protecting core Sims Technology innovations. Interviews with more than 30 participants through the NSF's I-Corps program run by University of Washington's commercialization office CoMotion yielded confirmation of the pains that Aria addresses and the gains it can provide, showing viability and commercial readiness of this work.
+
+%A provisional patent application filed in 2025 protects core Sims Technology innovations. This project establishes the translation pathway from validated research to commercial deployment through I-Corps customer discovery, iterative prototype development, and market validation with target user populations.
+
+\vspace*{-10pt}
+\subsection{NSF-Catalyzed Partnership}
+\vspace*{-8pt}
+AMD serves as the NSF Catalyst Partner for this project, bringing hardware 
+expertise and industry perspective essential for successful technology 
+translation. AMD's Responsible AI Lead provides strategic guidance on 
+deploying privacy-preserving AI systems on edge hardware, ensuring Aria's 
+architecture optimally leverages AMD's heterogeneous compute platforms.
+
+The partnership addresses a critical gap in the edge AI ecosystem: while 
+hardware capabilities have advanced dramatically---AMD's Ryzen AI processors 
+deliver up to 50 TOPS (trillion operations per second) through dedicated 
+Neural Processing Units---software for continuous, privacy-preserving 
+personalization has not kept pace. AMD's strategic analysis identifies that 
+edge platforms have solved ``how fast models run'' but not ``how models 
+learn, adapt, and earn trust over time.'' Aria directly addresses this gap.
+
+AMD contributes four capabilities uniquely suited to Aria's requirements. 
+First, \textit{sustained performance per watt} enables always-on AI assistants 
+without prohibitive battery drain. Second, \textit{heterogeneous compute} 
+across CPU, GPU, and NPU allows workload-optimized execution---inference on 
+the power-efficient NPU, fine-tuning updates on the GPU, orchestration on 
+the CPU. Third, \textit{hardware-backed privacy} through AMD Memory Guard 
+provides full system memory encryption protecting sensitive Sims data even 
+against physical access attacks \cite{amd2024prosecurity}. Fourth, 
+\textit{enterprise-grade reliability} meets deployment requirements in 
+regulated industries where uptime and stability are non-negotiable.
+
+Collaboration activities include quarterly technical reviews, access to AMD 
+developer resources and hardware platforms for optimization testing, and 
+joint exploration of OEM partnership opportunities as Aria matures toward 
+commercial deployment.
+
+
+\vspace*{-8pt}
+\section{Research Motivation}
+\label{sec:motivation}
+
+\vspace*{-8pt}
+\subsection{Problem Statement and Importance}
+\vspace*{-8pt}
+\textbf{The Privacy-Personalization Paradox.} Contemporary AI-powered personal assistants confront a fundamental architectural tension: delivering meaningful personalization typically requires transmitting sensitive user data to centralized cloud infrastructure for processing and model training. This design creates an inherent conflict between user privacy expectations and the data requirements for effective AI assistance. Research demonstrates that users exhibit significant apprehension regarding voice assistant data practices, with studies indicating that approximately 60\% of users express at least occasional concerns about privacy when interacting with these systems \cite{li2023security}. Furthermore, investigations reveal that nearly half of users remain unaware that voice assistants continuously monitor ambient audio for activation commands, exacerbating trust deficits when this functionality becomes apparent \cite{edu2021security}.
+
+This tension manifests across several critical dimensions. First, regarding \textbf{user trust and adoption barriers}, privacy concerns represent a primary factor inhibiting technology acceptance. Research on voice-based digital assistants indicates that perceived privacy risk significantly influences adoption intentions, with users engaging in privacy calculus behaviors that weigh personalization benefits against data exposure costs \cite{vimalkumar2021digital}. Second, concerning \textbf{regulatory and compliance pressure}, the global regulatory landscape increasingly constrains centralized data collection practices. The European General Data Protection Regulation (GDPR), California Consumer Privacy Act (CCPA), and emerging international frameworks impose stringent requirements on data processing, storage, and user consent that cloud-dependent architectures struggle to satisfy efficiently. Third, with respect to \textbf{security vulnerabilities}, centralized repositories of personal data present attractive targets for malicious actors. Documented incidents include unintended recording transmission to contacts, employee access to private conversations for algorithm training, and various attack vectors exploiting voice assistant vulnerabilities \cite{edu2021security}. Finally, regarding \textbf{context collapse in single-persona modeling}, existing cloud-based systems represent users through monolithic preference profiles that fail to capture the multifaceted nature of human identity. Users behave differently across life contexts---professional, familial, recreational---yet current assistants cannot distinguish or adapt to these contextual variations without invasive monitoring that further compounds privacy concerns.
+
+\textbf{Stakeholder Impact and Market Need.} The consequences of this privacy-personalization paradox extend across the AI assistant ecosystem. \textit{Consumers} face an unsatisfactory choice between accepting generic, context-unaware assistance or surrendering personal data sovereignty. \textit{Enterprise organizations} in regulated industries (healthcare, finance, legal) cannot deploy powerful AI assistance tools without violating compliance requirements governing sensitive data handling. \textit{Device manufacturers} seek differentiation strategies as hardware commoditization intensifies, yet remain dependent on third-party cloud services for AI capabilities. \textit{Healthcare and financial services providers} recognize the transformative potential of AI assistance but cannot reconcile data protection obligations with current architectural approaches.
+
+\vspace*{-8pt}
+\subsection{Current State-of-the-Art and Gaps}
+\vspace*{-8pt}
+The personal AI assistant landscape comprises several architectural approaches, each exhibiting significant limitations that Aria's innovation addresses.
+
+\textbf{Cloud-Centric Assistants.} Dominant platforms including Amazon Alexa and 
+Google Assistant process user interactions primarily through cloud infrastructure, 
+fundamentally compromising user privacy. Apple has differentiated through Apple 
+Intelligence, introduced in 2024, which represents the most sophisticated 
+privacy-preserving approach among incumbents. Apple Intelligence employs a 
+3-billion parameter on-device model optimized through techniques including 
+2-bit quantization-aware training and KV-cache sharing \cite{apple2024foundation}. 
+For complex tasks exceeding on-device capabilities, requests route to Private 
+Cloud Compute (PCC), a server infrastructure built on Apple silicon with 
+``stateless'' processing that purportedly deletes user data immediately after 
+request completion \cite{apple2024pcc}. Apple has invited security researchers 
+to audit PCC through a Virtual Research Environment and released portions of 
+the source code \cite{apple2024pccresearch}.
+
+Despite these advances, Apple Intelligence retains fundamental limitations that 
+Aria addresses. First, PCC still transmits user data beyond device boundaries 
+for complex operations---regardless of stateless processing claims, sensitive 
+information travels to external servers. Second, Apple Intelligence employs a 
+single semantic index rather than multi-context personas; it cannot distinguish 
+user behavior across professional, personal, and family contexts. Third, 
+enterprise deployments face significant obstacles: Apple explicitly lacks 
+enterprise APIs for tracking or customizing AI usage, SIEM integration for 
+security monitoring, and custom policy controls beyond basic MDM toggles. 
+For regulated industries requiring comprehensive compliance documentation and 
+audit trails, these limitations preclude adoption. Aria's complete on-device 
+architecture with multi-persona modeling addresses these gaps directly.
+
+\textbf{Privacy-Preserving Approaches.} Emerging alternatives attempt to address privacy concerns through various mechanisms. Federated learning, pioneered for mobile keyboard prediction, enables collaborative model training without centralizing raw data by exchanging model updates rather than training examples \cite{mcmahan2017communication}. This paradigm shift demonstrated that effective learning could occur with data remaining distributed across devices, reducing privacy exposure. However, federated approaches still involve server-side aggregation and do not address the fundamental challenge of personalization requiring intimate knowledge of individual user contexts. On-device processing initiatives, including Apple's expansion of Neural Engine capabilities, represent movement toward local computation but remain limited in scope and personalization depth.
+
+\textbf{Browser-Dependent Solutions.} Recent entrants such as browser-based AI assistants leverage local storage and processing within browser environments. While partially addressing privacy concerns for web-based activities, these solutions cannot operate across the full spectrum of user contexts---they remain blind to offline activities, non-browser applications, and the physical environment signals that inform genuine context awareness.
+
+\textbf{Emerging Privacy-Focused Alternatives.} Several startups and open-source projects have emerged targeting privacy-conscious users. Browser-based assistants like You.com and Maple AI offer encrypted interactions and limited data retention, while local inference tools such as Ollama enable running language models entirely on consumer hardware. European initiatives including 
+Mistral AI emphasize data sovereignty through open-source model availability. 
+However, these solutions share critical limitations: browser-based approaches cannot access contexts beyond web interactions; local LLM tools lack personalization, context-awareness, and polished user experiences; and open-source model providers do not offer integrated assistant products with multi-context adaptation. No emerging competitor combines on-device processing, multi-persona modeling, and consumer-ready assistant functionality---the 
+unique combination Aria provides.
+
+\textbf{Critical Gaps.} Analysis of current approaches reveals several unaddressed requirements. No existing solution provides \textit{multi-persona modeling} that dynamically represents and transitions between user contexts. Current privacy-preserving techniques sacrifice \textit{personalization depth} for data protection rather than achieving both simultaneously. Existing systems lack \textit{evolutionary adaptation} mechanisms that allow user representations to develop organically over time without explicit training interventions. Finally, no commercial solution offers \textit{complete data sovereignty} where user information never leaves device boundaries under any circumstance.
+
+\textbf{Why Incumbents Cannot Address This Gap.} 
+A natural question arises: why haven't technology giants with superior resources solved this problem? Analysis reveals structural barriers preventing incumbent solutions:
+
+First, \textit{business model conflicts} create misaligned incentives. Major 
+platforms derive substantial revenue from data-driven advertising and services. 
+For instance, Google's advertising revenue exceeded \$200 billion in 2023, 
+fundamentally dependent on user data collection. Apple, while positioning as 
+privacy-focused, generates significant revenue from services requiring cloud 
+integration. Developing genuinely privacy-preserving AI would cannibalize 
+these revenue streams.
+
+Second, \textit{architectural constraints} limit retrofit potential. Apple 
+Intelligence, announced in 2024, exemplifies the hybrid approach: a 3-billion 
+parameter on-device model handles simple tasks while complex requests route 
+to Private Cloud Compute servers running on Apple silicon 
+\cite{apple2024foundation}. While technically sophisticated, this architecture 
+still transmits user data beyond device boundaries for many operations. 
+Furthermore, Apple Intelligence lacks enterprise APIs, security information 
+and event management (SIEM) integration, and custom policy controls---critical 
+requirements for regulated industries.
+
+Third, \textit{single-persona limitations} persist across all incumbent 
+solutions. Neither Apple's semantic index nor Google's on-device processing 
+offers multi-context persona modeling. Users are represented through monolithic 
+profiles that cannot distinguish or adapt to contextual variations in behavior 
+and preferences.
+
+Aria's competitive position rests on four reinforcing advantages: (1) patent 
+protection for core Sims Technology innovations; (2) architectural commitment 
+to complete on-device processing without business model conflicts; (3) 
+multi-context persona synthesis unavailable in incumbent solutions; and (4) 
+enterprise-focused features addressing compliance requirements that consumer-
+oriented platforms neglect.
+
+\textbf{On-Premises Enterprise Solutions.} Microsoft and Google have 
+introduced on-premises AI capabilities for enterprise customers concerned 
+about cloud data exposure. Microsoft's Copilot+ PCs and Azure AI on-premises 
+offerings provide local inference while maintaining integration with Microsoft 
+365 services. Google's Distributed Cloud enables AI workloads in customer 
+data centers. However, these solutions prioritize enterprise IT deployment 
+over personal AI assistance; they lack individual-level personalization, 
+multi-context awareness, and the user-facing privacy transparency mechanisms 
+that build consumer trust. Furthermore, their business models remain tied 
+to broader cloud service ecosystems, limiting their ability to offer 
+genuinely privacy-first architectures without conflicts of interest. Aria 
+differentiates through consumer-centric design with enterprise compliance 
+capabilities, rather than enterprise infrastructure with consumer features 
+added as an afterthought.
+
+\vspace*{-8pt}
+\subsection{The STEM Discovery Foundation}
+\vspace*{-8pt}
+Aria's innovation synthesizes advances across multiple research domains into a coherent architectural approach that resolves the privacy-personalization paradox.
+
+\textbf{On-Device Machine Learning.} The past decade witnessed substantial progress in deploying machine learning models on resource-constrained edge devices. Research on deploying AI at the network periphery demonstrates that optimized inference frameworks, model compression techniques, and specialized hardware accelerators now enable sophisticated reasoning within mobile device constraints \cite{chen2019deep}. Quantization approaches reduce model memory footprints by representing parameters with lower-precision numerical formats while preserving accuracy. Pruning techniques eliminate redundant network connections to decrease computational requirements. Knowledge distillation transfers capabilities from large teacher models to compact student architectures suitable for edge deployment. These advances collectively enable the on-device processing foundation essential for privacy-preserving personalization.
+
+\textbf{Efficient Fine-Tuning Methods.} Traditional neural network adaptation 
+requires updating all model parameters---computationally prohibitive for 
+on-device execution. Low-Rank Adaptation (LoRA) introduced a breakthrough 
+approach that freezes pretrained weights while training only compact rank 
+decomposition matrices injected at each transformer layer \cite{hu2022lora}. 
+This technique reduces trainable parameters by factors exceeding 10,000$\times$ 
+compared to full fine-tuning while achieving comparable or superior task 
+performance on benchmarks including WikiSQL, MultiNLI, and SAMSum.
+
+LoRA involves trade-offs that warrant acknowledgment. The rank decomposition 
+process introduces information loss during matrix compression; some details 
+are inevitably lost when representing full-rank updates through low-rank 
+approximations. Recent research indicates that LoRA may underperform full 
+fine-tuning when target domains differ substantially from pre-training data 
+distributions \cite{biderman2024lora}. However, these trade-offs are acceptable 
+for Aria's personalization use case for three reasons. First, large language 
+models are substantially over-parameterized, containing redundant parameters 
+that can be reduced without quality degradation \cite{aghajanyan2020intrinsic}. 
+Second, personalization adapts models to individual user preferences rather 
+than dramatic domain shifts, a regime where LoRA excels. Third, research 
+demonstrates that even rank values as low as 4 achieve competitive performance 
+on many adaptation tasks, while LoRA actually better preserves source-domain 
+capabilities and produces more diverse outputs than full fine-tuning 
+\cite{biderman2024lora}. Aria's architecture further mitigates trade-offs through 
+continuous, incremental learning that iteratively refines adaptations rather 
+than requiring one-shot perfection.
+
+\textbf{Privacy-Preserving Distributed Learning.} Federated learning established that machine learning models could achieve competitive performance while keeping training data decentralized across edge devices \cite{mcmahan2017communication}. Subsequent research integrated differential privacy guarantees with federated protocols, providing formal privacy protections against inference attacks on model updates. These developments demonstrate the technical feasibility of learning from sensitive data without centralization. Aria builds upon these foundations while moving beyond the server-aggregation paradigm toward fully device-contained personalization that eliminates even model update transmission.
+
+\textbf{User Modeling and Personalization.} Research on user modeling for information systems and recommender systems has evolved from simple preference profiles toward sophisticated representations capturing behavioral patterns, contextual influences, and temporal dynamics \cite{eke2019survey}. Contemporary approaches employ deep learning architectures to model complex user behavior sequences and multi-type interactions \cite{he2023survey}. The field increasingly recognizes that users exhibit different preferences and behaviors across contexts, motivating research into context-dependent modeling. Aria's Sims Technology synthesizes these advances into dynamic digital representations that evolve through ongoing interaction rather than static profile snapshots.
+
+\textbf{Context-Aware Computing.} Foundational work defined context as any information characterizing the situation of an entity relevant to user-application interaction, establishing that systems could adapt behavior based on location, time, identity, and activity \cite{dey2001understanding}. Subsequent research developed context modeling and reasoning techniques supporting context-aware application development \cite{bettini2010survey}. The proliferation of sensors in mobile devices---accelerometers, GPS, ambient light, proximity---provides rich signals for inferring user context without explicit input. Aria leverages these advances for automatic persona selection and blending based on detected contextual state.
+
+\vspace*{-8pt}
+\subsection{Proposed End Goals and Translation Path}
+\vspace*{-8pt}
+This project pursues specific translation outcomes that collectively establish Aria as a commercially viable product addressing demonstrated market needs.
+
+\textbf{Translation Outcome 1: Functional Prototype.} The primary deliverable is a deployable Aria application demonstrating Sims Technology on iOS and Android platforms. This prototype will implement core capabilities including on-device persona creation and evolution, automatic context detection and persona selection, privacy-preserving personalization without cloud data transmission, and cross-context persona synthesis. The prototype will undergo iterative refinement through beta testing with target user populations, incorporating customer discovery insights from I-Corps training.
+
+\textbf{Translation Outcome 2: Startup Formation.} NxTAGE will incorporate as a commercial entity positioned to pursue market deployment following project completion. Corporate formation activities include establishing appropriate legal structure, formalizing intellectual property assignments, developing governance frameworks, and preparing investor materials for follow-on funding pursuit.
+
+\textbf{Translation Outcome 3: Strategic Partnership Development.} Customer discovery activities will identify and cultivate relationships with potential strategic partners including device manufacturers seeking privacy-differentiated AI capabilities, enterprise software providers requiring compliant AI assistance integration, and platform operators interested in licensing Sims Technology for their ecosystems.
+
+\textbf{Translation Outcome 4: Intellectual Property Protection.} The project will pursue patent protection for core innovations including the Sims Technology architecture, on-device persona synthesis methods, context-aware persona selection algorithms, and privacy-preserving fine-tuning adaptations. A provisional patent application has been filed; this project will support prosecution toward issuance and strategic continuation filings.
+
+\textbf{Translation Outcome 5: Follow-on Funding Position.} Project completion will position NxTAGE for NSF SBIR/STTR Phase I application, venture capital investment, or strategic partnership investment. Demonstrated technical feasibility, validated market demand through customer discovery, and established intellectual property will collectively strengthen subsequent funding applications.
+
+\vspace*{-8pt}
+\subsection{Potential Value and Interested Stakeholders}
+\vspace*{-8pt}
+\textbf{Market Opportunity.} The intelligent virtual assistant market exhibits substantial scale and growth trajectory. Industry analyses project the global market to reach approximately \$14 billion by 2030, representing a compound annual growth rate exceeding 24\% \cite{grandview2023iva}. The market expansion reflects increasing consumer adoption of smart devices, enterprise deployment of conversational AI for customer service and productivity enhancement, and integration of AI assistants across automotive, healthcare, and smart home applications. Critically, privacy-focused segments demonstrate accelerated growth as consumers and enterprises increasingly prioritize data protection, creating specific demand for solutions addressing the privacy-personalization paradox.
+
+\textbf{Target Market Segments.} Aria addresses three primary market segments with distinct value propositions. The \textit{privacy-conscious consumer segment} comprises early adopters who recognize privacy value and will pay premium prices for data sovereignty. This segment provides initial market validation and generates testimonials supporting broader adoption. The \textit{enterprise compliance segment} includes organizations in regulated industries---healthcare, financial services, legal, government---that cannot deploy cloud-dependent AI assistants due to data handling restrictions. Aria enables these organizations to realize AI productivity benefits while maintaining regulatory compliance. The \textit{device manufacturer segment} represents original equipment manufacturers seeking differentiation through privacy-respecting AI capabilities integrated at the operating system or hardware level. Strategic partnerships with device manufacturers offer licensing revenue and scaled distribution channels.
+
+\textbf{Competitive Positioning.} Aria occupies a unique competitive position combining complete on-device processing (unlike cloud-dependent incumbents), multi-context persona modeling (unlike single-profile alternatives), and dynamic evolutionary adaptation (unlike static preference systems). This positioning addresses unmet market needs while establishing defensible differentiation through patented technology and accumulated user trust.
+
+\textbf{Economic Impact.} Successful commercialization generates economic value through direct employment at NxTAGE, technology licensing revenue contributing to university technology transfer outcomes, downstream economic activity from enterprise productivity improvements enabled by compliant AI assistance, and potential acquisition value if strategic acquirers recognize Aria's market position and technology assets.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Section 3: Development of Solutions
+% NSF TTP-T Proposal: NxTAGE/Aria Privacy-First Personal AI Assistant
+% Target length: 5-6 pages
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\vspace*{-8pt}
+\section{Development of Solutions}
+\label{sec:development}
+\vspace*{-8pt}
+This section presents the technical development plan for translating Aria's privacy-first personal AI assistant from research prototype to market-ready product. We address the fundamental engineering challenges of delivering sophisticated personalization entirely on-device, describe our iterative validation methodology, establish measurable milestones with decision criteria, and outline the path to commercial deployment.
+
+\vspace*{-8pt}
+\subsection{Technical Barriers and Anticipated Hurdles}
+\vspace*{-8pt}
+Realizing on-device personalized AI presents four interconnected technical challenges that require novel solutions combining advances in model compression, context-aware computing, privacy-preserving machine learning, and human-computer interaction.
+
+\textbf{Challenge 1: On-Device Computational Constraints.}
+Contemporary mobile and edge devices impose severe constraints on memory, 
+processing power, and energy consumption that fundamentally limit deployment 
+of sophisticated AI models. State-of-the-art language models require 
+gigabytes of memory and substantial computational resources, creating 
+fundamental tension with mobile deployment requirements \cite{han2016deep}. 
+
+Our approach employs a multi-faceted optimization strategy leveraging modern 
+heterogeneous compute architectures. AMD's Ryzen AI platforms exemplify these 
+capabilities, combining CPU cores for orchestration, integrated GPU for 
+parallel processing, and dedicated Neural Processing Units (NPUs) delivering 
+up to 50 TOPS for efficient AI inference \cite{amd2024ryzenai}. This 
+heterogeneous architecture enables workload-appropriate execution: low-latency 
+inference on the power-efficient NPU, computationally intensive fine-tuning 
+on the GPU, and system orchestration on the CPU.
+
+We apply structured pruning to systematically remove redundant network 
+connections, achieving 9-13$\times$ reduction without accuracy loss 
+\cite{liang2021pruning}. Quantization reduces numerical precision to 8-bit 
+or 4-bit integers, enabling 4-8$\times$ memory reduction with minimal 
+degradation \cite{gholami2022survey}. Knowledge distillation transfers 
+capabilities from large teacher models to compact architectures optimized 
+for edge deployment \cite{hinton2015distilling}.
+
+For personalization, Low-Rank Adaptation (LoRA) reduces trainable parameters 
+by approximately 10,000$\times$ compared to full fine-tuning \cite{hu2022lora}, 
+enabling continuous on-device learning within tight memory and power budgets. 
+The combination of efficient algorithms and heterogeneous hardware enables 
+sub-500ms inference latency and sub-2GB memory footprint while maintaining 
+multi-day battery life.
+
+\textbf{Challenge 2: Multi-Context Persona Synthesis.}
+Users inhabit multiple life contexts---professional, personal, family, social---each requiring different interaction patterns and information access. Current AI assistants fail to recognize these context boundaries, leading to inappropriate responses and privacy violations through context collapse \cite{dey2001understanding}. 
+
+Sims Technology addresses this through dynamic digital representations that evolve based on contextual signals. Our approach leverages smartphone sensor data for context inference, building on advances in human activity recognition that achieve over 90\% accuracy in distinguishing activities using accelerometer and gyroscope data \cite{wang2019deep}. We extend these techniques to recognize higher-level contexts (work meetings, family dinner, exercise) through multi-modal sensor fusion combining location patterns, temporal signals, application usage, and ambient audio characteristics.
+
+Context switching employs a hierarchical state machine that manages transitions between personas while maintaining appropriate information boundaries. Each Sim maintains independent preference models, communication styles, and access permissions, enabling the assistant to adapt its behavior appropriately without explicit user intervention. User override mechanisms ensure transparency and control, with clear visual indicators showing the currently active context.
+
+\textbf{Challenge 2b: Continuous Learning and Long-Term Memory.}
+Personal AI assistants must accumulate knowledge over extended periods while 
+avoiding common failure modes: brittleness from catastrophic forgetting, 
+bias amplification from training on unrepresentative data, and invasiveness 
+from retaining information users would prefer forgotten. Existing approaches 
+rely on short-lived session memory, cloud-synchronized storage that 
+compromises privacy, or burdensome manual curation.
+
+Aria's architecture addresses long-term memory through three mechanisms. 
+First, \textit{elastic weight consolidation} protects important learned 
+associations during continued learning, preventing catastrophic forgetting 
+while enabling adaptation \cite{kirkpatrick2017overcoming}. Second, 
+\textit{importance-weighted experience replay} selectively reinforces 
+representative interactions, counteracting distributional drift that could 
+introduce bias. Third, \textit{user-controlled memory pruning} enables 
+explicit forgetting---users can designate categories of information for 
+automatic expiration or immediate deletion, maintaining agency over what 
+the system retains.
+
+These mechanisms operate entirely on-device, with memory stored in encrypted 
+local storage protected by hardware security features. The result is 
+personal AI that genuinely learns and improves over months and years of 
+use, without the privacy compromises of cloud synchronization or the 
+cognitive burden of manual curation.
+
+\textbf{Challenge 3: Privacy-Preserving Personalization.}
+On-device processing eliminates cloud transmission risks but introduces new 
+challenges: protecting sensitive Sims data from local attacks, ensuring 
+training processes do not leak private information, and providing verifiable 
+privacy guarantees.
+
+We implement differential privacy for all model updates, building on 
+foundational work demonstrating that deep neural networks can be trained 
+under modest privacy budgets \cite{abadi2016deep}. Differentially private 
+stochastic gradient descent adds calibrated noise during training, providing 
+formal mathematical guarantees against data extraction from model parameters.
+
+For scenarios requiring aggregated insights across users, federated learning 
+protocols enable collaborative model improvement without centralizing raw 
+data \cite{mcmahan2017communication}. Secure aggregation ensures only 
+aggregated gradients---not individual contributions---are visible to 
+coordinating servers \cite{bonawitz2017practical}.
+
+Hardware-level protection provides the foundation for verifiable privacy 
+guarantees. On mobile devices, ARM TrustZone isolates sensitive computations 
+from the main operating system \cite{pinto2019demystifying}. On PC and edge 
+platforms, AMD PRO processors provide additional hardware-backed security 
+through AMD Memory Guard---real-time full system memory encryption that 
+protects against cold boot attacks, DRAM interface snooping, and physical 
+access exploits \cite{amd2024prosecurity}. The AMD Secure Processor provides 
+a hardware root of trust, validating firmware integrity before execution and 
+isolating cryptographic operations from potentially compromised system 
+software. These hardware mechanisms address reviewer concerns that edge AI 
+systems ``often claim privacy but lack formal hardware-backed isolation'' 
+with verifiable guarantees against data extraction, model inversion, and 
+side-channel attacks.
+
+\textbf{Challenge 4: User Trust and Adoption.}
+Privacy-focused products face a credibility challenge: users have been conditioned by repeated privacy violations to distrust corporate privacy claims. Research on technology acceptance demonstrates that perceived usefulness and ease of use are necessary but insufficient for adoption of AI technologies; trust and transparency emerge as critical additional factors \cite{davis1989perceived, sohn2020technology}.
+
+Critically, we design transparency mechanisms that are both technically 
+rigorous and cognitively accessible to non-expert users---addressing the 
+concern that black-box behavior, even on-device, undermines confidence. 
+Our approach employs progressive disclosure: high-level natural language 
+summaries (``Your professional Sim influenced this response based on your 
+meeting calendar'') supported by drill-down access to technical details 
+for users who want them. Real-time dashboards visualize which Sim is active, 
+what data it accessed, and how personalization influenced the response. 
+Privacy boundaries are made explicit through visual indicators showing 
+when context switches occur and what information remains isolated between 
+Sims. These mechanisms transform opacity from a liability into a 
+differentiator, as users develop justified confidence through observable, 
+predictable system behavior.
+
+We will conduct iterative user studies following established human-computer interaction methodologies to validate that our transparency mechanisms effectively build trust without overwhelming users with technical complexity \cite{hussain2009current}. Findings will inform interface refinements ensuring privacy guarantees are both robust and comprehensible.
+
+\vspace*{-8pt}
+\subsection{Testing, Refinement, and Validation Plan}
+\vspace*{-8pt}
+Our development follows an iterative methodology integrating agile software development with user-centered design principles \cite{silva2011user}. This approach enables rapid iteration on technical components while maintaining continuous alignment with user needs and market requirements.
+
+\textbf{Phase 1: Core Technology Validation (Months 1-12).}
+The first year focuses on establishing technical feasibility for on-device personalization at production quality levels.
+
+\textit{Algorithm Development and Benchmarking:} We will develop and rigorously benchmark on-device fine-tuning algorithms targeting sub-500ms latency for inference and sub-2GB memory footprint for the complete Sims model. Benchmarking will employ standardized datasets and comparison against cloud-based alternatives to quantify any accuracy-efficiency tradeoffs.
+
+\textit{Sims Framework Prototype:} We will implement the initial Sims representation framework, including context detection algorithms, persona state management, and preference learning mechanisms. Technical validation will confirm that multi-context switching operates reliably with $>$85\% context detection accuracy.
+
+\textit{Controlled User Studies:} We will conduct user studies with approximately 50 participants following IRB-approved protocols. Studies will employ mixed methods combining quantitative usability metrics (task completion time, error rates, System Usability Scale scores) with qualitative feedback through semi-structured interviews. Participant recruitment will emphasize demographic diversity to identify potential usability issues across user populations.
+
+\textit{I-Corps Customer Discovery:} Concurrent with technical development, the project team completes NSF I-Corps training, conducting 100+ customer discovery interviews to validate market assumptions and refine the value proposition. Findings directly inform Phase 2 development priorities.
+
+\textit{Deliverables:} Technical feasibility demonstration; validated fine-tuning algorithms; preliminary Sims framework; customer discovery insights; I-Corps completion certificate.
+
+\textbf{Preliminary Feasibility Indicators.} Several early indicators support 
+the achievability of Phase 1 goals. First, Apple's Core ML benchmarks 
+demonstrate that 8-billion parameter language models can achieve approximately 
+33 tokens per second on M1 Max processors using Int4 quantization and 
+KV-cache optimization \cite{apple2024coreml}---performance characteristics 
+consistent with our latency targets. Second, prior NSF-supported research 
+(III-1717488) established theoretical foundations for proactive agent behavior 
+and collaborative task identification that directly inform Sims Technology's 
+context-aware activation mechanisms. Third, I-Corps customer discovery with 
+over 30 participants validated not only market demand but also technical 
+credibility: privacy-conscious enterprise stakeholders in healthcare and legal 
+sectors confirmed that on-device processing would satisfy their compliance 
+requirements. Fourth, published sensor fusion research demonstrates context 
+detection accuracies exceeding 90\% \cite{wang2019deep}, providing baseline 
+confidence for our 85\% target. These convergent indicators---from hardware 
+capabilities to algorithmic foundations to market validation---support 
+confidence in Phase 1 technical feasibility.
+
+\textbf{Phase 2: Prototype Development (Months 13-24).}
+Year two translates validated algorithms into functional mobile applications while expanding user validation.
+
+\textit{Cross-Platform Development:} We will develop functional prototypes for both iOS and Android platforms, ensuring feature parity and consistent user experience. Development will employ native platform capabilities for optimal performance, particularly for sensor access and TEE integration.
+
+\textit{Multi-Context Implementation:} We will implement complete multi-context persona switching with the full Sims Technology stack. Integration testing will validate seamless transitions between contexts and appropriate information boundary enforcement.
+
+\textit{Expanded User Studies:} We will expand user studies to approximately 200 participants across diverse demographics, including targeted recruitment of privacy-conscious users and enterprise information workers representing key market segments. Studies will employ longitudinal designs with 4-8 week usage periods to assess sustained engagement and trust development.
+
+\textbf{Privacy-Conscious User Recruitment Strategy.} Reaching privacy-conscious 
+users requires targeted recruitment beyond standard channels. Our strategy 
+employs four complementary approaches. First, \textit{community engagement} 
+targets online spaces where privacy-conscious users congregate, including 
+privacy-focused subreddits, security researcher forums, and digital rights 
+advocacy communities. Second, \textit{professional network recruitment} 
+leverages connections to healthcare, legal, and financial professional 
+associations where compliance requirements create heightened privacy awareness. 
+Third, \textit{privacy media partnerships} pursue coverage in outlets such as 
+the Electronic Frontier Foundation blog and security-focused podcasts reaching 
+self-selected privacy-conscious audiences. Fourth, \textit{screening instruments} 
+apply validated privacy concern scales during recruitment to identify 
+participants with demonstrated privacy sensitivity rather than merely stated 
+preferences \cite{buchanan2007development}. This multi-pronged approach ensures 
+representative sampling of the target market segment during beta validation.
+
+\textit{Third-Party Security Audit:} We will engage independent security researchers to audit privacy implementations, including penetration testing, code review of TEE integrations, and formal verification of differential privacy bounds.
+
+\textit{Deliverables:} Beta-ready iOS and Android prototypes; security audit report; expanded user study findings; refined product specifications.
+
+\textbf{Phase 3: Market Validation (Months 25-36).}
+The final year validates product-market fit through real-world deployment and establishes commercialization foundations.
+
+\textit{Beta Deployment:} We will deploy beta versions to approximately 1,000 early adopters recruited through I-Corps networks, privacy advocacy communities, and enterprise pilot partners. Beta participants will provide continuous feedback through in-app mechanisms and periodic surveys.
+
+\textit{Usage Analytics:} Privacy-preserving on-device analytics capture engagement metrics (session frequency, feature usage, retention) without compromising user privacy. Aggregated, differentially private summaries inform product refinement.
+
+\textit{Enterprise Pilots:} We will conduct structured pilots with 2-3 enterprise partners in privacy-sensitive industries (healthcare, legal, financial services) to validate B2B value proposition and identify enterprise-specific requirements.
+
+\textit{Commercialization Planning:} Based on market validation findings, we finalize go-to-market strategy, pricing models, and partnership structures. Preparation of materials for follow-on funding (SBIR/STTR, venture capital) proceeds in parallel.
+
+\textit{Deliverables:} Market-ready product; validated product-market fit metrics; enterprise pilot results; commercialization plan; investor materials.
+
+\vspace*{-8pt}
+\subsection{Development Timeline and Milestones}
+\vspace*{-8pt}
+Table \ref{tab:milestones} presents the 36-month milestone schedule with quarterly deliverables. Importantly, while the grant period spans three years per NSF requirements, the timeline front-loads technical development to achieve a functional public beta by Month 27, with ongoing user engagement beginning in Month 21. This phased approach allows pivoting based on market feedback while maintaining rigorous validation standards.
+
+\begin{table*}[t]
+\centering
+\caption{36-month milestone timeline with success metrics and decision criteria.\vspace*{16pt}}
+\small
+\begin{tabular}{p{0.8cm}p{5.5cm}p{4cm}p{5.5cm}}
+\toprule
+\textbf{Q} & \textbf{Milestone} & \textbf{Success Metric} & \textbf{Go/No-Go Criteria} \\
+\midrule
+\multicolumn{4}{l}{\textit{Year 1: Core Technology Validation}} \\
+1 & On-device inference baseline & Latency $<$500ms (95th \%ile) & Technical feasibility confirmed \\
+2 & Fine-tuning algorithm v1.0 & Memory $<$2GB peak & Mobile deployment viable \\
+3 & Sims framework prototype & User study approval (n=50) & Technical approach validated \\
+4 & I-Corps training completion & 100+ discovery interviews & Market understanding established \\
+\midrule
+\multicolumn{4}{l}{\textit{Year 2: Prototype Development}} \\
+5 & iOS prototype alpha & 100 test users onboarded & Usability threshold met (SUS$>$68) \\
+6 & Android prototype alpha & Cross-platform parity & Platform strategy confirmed \\
+7 & Multi-context switching & Context accuracy $>$85\% & Core differentiator functional \\
+8 & Security audit complete & No critical vulnerabilities & Trust claims independently verified \\
+\midrule
+\multicolumn{4}{l}{\textit{Year 3: Market Validation}} \\
+9 & Public beta launch & 500+ active weekly users & Initial traction demonstrated \\
+10 & Enterprise pilot initiation & 2+ signed pilot agreements & B2B viability signal \\
+11 & Investor readiness & Pitch deck; financial model & Funding pathway established \\
+12 & Commercialization plan & Complete GTM strategy & Sustainable business model defined \\
+\bottomrule
+\end{tabular}
+\label{tab:milestones}
+\end{table*}
+
+\vspace*{-8pt}
+\subsection{Success Metrics and Pivot Criteria}
+\vspace*{-8pt}
+We will establish quantitative metrics across technical performance, user engagement, and market validation dimensions, with explicit thresholds triggering strategic pivots if primary approaches prove unviable.
+
+\textbf{Technical Performance Metrics:}
+\begin{itemize}[noitemsep]
+    \item \textit{Inference Latency:} Target $<$500ms at 95th percentile for natural interaction flow
+    \item \textit{Memory Footprint:} Target $<$2GB for complete Sims model enabling broad device compatibility
+    \item \textit{Personalization Quality:} Target $>$80\% user satisfaction with assistant responses (validated via periodic surveys)
+    \item \textit{Context Detection Accuracy:} Target $>$85\% correct context identification across standard scenarios
+    \item \textit{Battery Impact:} Target $<$5\% additional daily battery consumption during typical usage
+\end{itemize}
+
+\textbf{User Engagement Metrics:}
+\begin{itemize}[noitemsep]
+    \item \textit{Retention:} Target $>$40\% weekly active users among beta cohort
+    \item \textit{Session Frequency:} Target $>$3 sessions per user per day indicating habitual usage
+    \item \textit{Net Promoter Score:} Target NPS $>$50 indicating strong user advocacy
+    \item \textit{Trust Score:} Target $>$4.0/5.0 on validated trust measurement instruments
+\end{itemize}
+
+\textit{Trust Score:} Target $>$4.0/5.0 on validated trust measurement 
+instruments. Trust measurement will employ the Short Trust in Automation Scale 
+(S-TIAS), a three-item instrument recently validated for AI applications with 
+demonstrated sensitivity to trustworthiness manipulations and strong predictive 
+validity for usage intentions \cite{mcgrath2025tias}. The S-TIAS enables 
+frequent, minimally disruptive measurement during longitudinal user studies, 
+supporting analysis of trust development trajectories over sustained 
+interaction periods. We supplement quantitative trust assessment with 
+semi-structured interviews exploring both cognitive trust (beliefs about system 
+reliability and competence) and affective trust (emotional comfort and 
+confidence), following frameworks distinguishing these dimensions in human-AI 
+interaction \cite{yang2024trust}. Trust metrics will be collected at multiple 
+timepoints: initial onboarding, after one week, one month, and three months 
+of usage, enabling analysis of trust formation and maintenance patterns.
+
+\textbf{Market Validation Metrics:}
+\begin{itemize}[noitemsep]
+    \item \textit{Enterprise Interest:} Target $>$5 qualified enterprise leads by Month 30
+    \item \textit{Pilot Conversion:} Target $>$50\% of pilots converting to paid engagements
+    \item \textit{Willingness to Pay:} Validate \$5-10/month consumer pricing through conjoint analysis
+\end{itemize}
+
+\textbf{Pivot Triggers and Alternative Strategies:}
+Strategic pivots activate if primary approaches fail to meet threshold criteria:
+
+\textit{If on-device performance is unachievable:} Pivot to privacy-preserving edge computing architecture using homomorphic encryption or secure multi-party computation for computationally intensive operations while maintaining local data storage.
+
+\textit{If consumer adoption is slow:} Pivot to enterprise-first strategy focusing on regulated industries (healthcare, legal, financial) where privacy requirements create stronger value proposition and longer sales cycles are acceptable.
+
+\textit{If multi-context Sims complexity is prohibitive:} Simplify to single-context personalization with manual context switching, reducing technical complexity while preserving core privacy differentiation.
+
+\textit{If trust barriers persist despite transparency:} Pursue third-party privacy certification (e.g., TRUSTe, Privacy Shield successors) and open-source core components to enable community verification.
+
+\vspace*{-8pt}
+\subsection{Risk Assessment and Mitigation}
+\vspace*{-8pt}
+Table \ref{tab:risks} presents comprehensive risk analysis across technical, market, operational, and regulatory dimensions.
+
+\begin{table*}[t]
+\centering
+\caption{Risk assessment matrix with likelihood, impact, and mitigation strategies.}
+\small
+\begin{tabular}{p{3.5cm}p{1.5cm}p{1.5cm}p{9cm}}
+\toprule
+\textbf{Risk Category} & \textbf{Likelihood} & \textbf{Impact} & \textbf{Mitigation Strategy} \\
+\midrule
+\multicolumn{4}{l}{\textit{Technical Risks}} \\
+Hardware limitations prevent on-device deployment & Medium & High & Tiered functionality; edge computing fallback; continuous benchmarking on latest devices \\
+Model compression degrades quality unacceptably & Medium & High & Ensemble of compression techniques; task-specific optimization; quality gates at each milestone \\
+Context detection accuracy insufficient & Medium & Medium & Multi-modal sensor fusion; user feedback loop for continuous improvement; manual override option \\
+\midrule
+\multicolumn{4}{l}{\textit{Market Risks}} \\
+Major platform (Apple/Google) launches competing feature & High & High & Patent protection; first-mover brand establishment; enterprise focus less vulnerable to consumer platform competition \\
+Privacy fatigue limits user willingness to engage & Medium & Medium & Simplified messaging; progressive disclosure; third-party validation \\
+Enterprise sales cycles exceed runway & Medium & High & Balanced consumer/enterprise strategy; milestone-based enterprise engagement \\
+\midrule
+\multicolumn{4}{l}{\textit{Operational Risks}} \\
+Key personnel departure & Low & High & Knowledge documentation; team redundancy; competitive compensation \\
+Development delays & Medium & Medium & Agile methodology with sprint buffers; prioritized feature backlog; regular milestone reviews \\
+\midrule
+\multicolumn{4}{l}{\textit{Regulatory Risks}} \\
+Privacy regulations increase compliance burden & Low & Medium & Privacy-by-design architecture exceeds current requirements; regulatory monitoring; flexible architecture \\
+Platform policy changes restrict functionality & Low & High & Multi-platform strategy; native platform relationships; contingency for web-based delivery \\
+\bottomrule
+\end{tabular}
+\label{tab:risks}
+\end{table*}
+
+\vspace*{-8pt}
+\subsection{Integration and Market Deployment Strategy}
+\vspace*{-8pt}
+Our commercialization strategy follows a staged approach with explicit pivot 
+criteria defining transitions between phases. This structure maintains focus 
+while preserving strategic flexibility based on market feedback.
+
+\textbf{Phase 1: Direct-to-Consumer Foundation (Months 30-42).}
+Initial market entry targets privacy-conscious consumers through direct mobile 
+app distribution. The freemium model offers core privacy-preserving assistant 
+functionality at no cost, with premium subscription (\$7.99/month) unlocking 
+advanced Sims capabilities.
+
+\textit{Phase 1 Success Criteria:} Weekly active users $>$500; premium 
+conversion rate $>$5\%; Net Promoter Score $>$50; trust score $>$4.0/5.0.
+
+\textit{Pivot Decision (Month 42):} If Phase 1 metrics are met, proceed to 
+Phase 2 enterprise expansion while maintaining consumer growth. If consumer 
+adoption is slow (weekly active users $<$200 or conversion $<$2\%) but 
+enterprise pilot interest is strong ($>$3 qualified leads), \textbf{pivot to 
+enterprise-first strategy}, deprioritizing consumer acquisition in favor of 
+B2B focus where longer sales cycles and compliance-driven value propositions 
+may yield stronger product-market fit.
+
+\textbf{Phase 2: Enterprise Licensing (Months 36-48).}
+Enterprise expansion targets organizations in regulated industries. The 
+enterprise offering includes dedicated deployment support, administrative 
+controls, compliance documentation, and service level agreements. Pricing 
+follows per-seat licensing (\$15-25/user/month).
+
+\textit{Phase 2 Success Criteria:} Signed pilot agreements $\geq$3; pilot-to-
+paid conversion $>$50\%; qualified enterprise pipeline $>$\$500K ARR potential.
+
+\textit{Pivot Decision (Month 48):} If enterprise metrics are met and $>$2 
+OEM partnership inquiries received, proceed to Phase 3 OEM licensing. If 
+enterprise traction is strong but consumer growth stalls, consider 
+\textbf{pure B2B pivot} with consumer offering repositioned as developer/
+prosumer tier. If neither consumer nor enterprise achieves targets, evaluate 
+\textbf{technology licensing pivot}---licensing Sims Technology to established 
+players rather than building standalone products.
+
+\textbf{Phase 3: OEM Partnerships (Months 42+).}
+Long-term strategy includes licensing Sims Technology to device manufacturers 
+seeking privacy differentiation.
+
+\textit{Phase 3 Entry Criteria:} Phase 3 activates only if: (a) proven 
+technology via successful Phase 1 or Phase 2 deployment; (b) demonstrated 
+device manufacturer interest via $\geq$2 formal partnership discussions; and 
+(c) intellectual property position secured through utility patent issuance.
+
+\vspace*{-8pt}
+\subsection{Intellectual Property Landscape}
+\vspace*{-8pt}
+\textbf{Current IP Status:}
+The project has established foundational IP protection through a provisional patent application filed in 2024: ``System and Method for Privacy-Preserving Personalized AI Assistance Using Dynamic Context-Aware Digital Representations.'' The provisional application covers five core innovations: (1) a method for constructing privacy-preserving Sims through on-device multi-source data fusion with automatic segmentation into specialized representations; (2) an adaptive Sim selection mechanism using context fingerprinting for dynamic retrieval based on multi-modal relevance scoring; (3) Sim-guided task elaboration that transforms user requests into personalized action plans through Sim-weighted attention mechanisms; (4) dynamic digital twin instantiation enabling parallel simulation of alternative approaches before execution; and (5) graduated disclosure protocols for selective information sharing with external agents based on Sim-defined privacy policies.
+
+Additionally, trade secret protections cover implementation details including specific model architectures, training procedures, and optimization techniques that provide competitive advantage but are better protected through secrecy than patent disclosure.
+
+\textbf{Professional IP Landscape Analysis:}
+A comprehensive prior art search conducted in July 2025 by patent counsel examined relevant disclosures across AI privacy, multi-agent systems, digital twins, and personalized AI domains. The analysis evaluated each core innovation against novelty and non-obviousness standards.
+
+\textit{High Novelty Assessment:} The landscape search found no single prior disclosure encompassing all elements of the invention. The creation of domain-specific personalized digital twins (Sims) represents a distinctive approach not anticipated by existing patents or publications. While digital twin concepts have been applied in industrial contexts, their application to personalized AI with automatic context segmentation constitutes novel subject matter.
+
+\textit{Non-Obviousness Considerations:} The analysis identified medium-to-high non-obviousness for the overall system, with specific strengths in certain methods. The automatic construction of multiple specialized persona representations from unified user data (Method 1) and the instantiation of digital twins for comparative personalization simulation (Method 4) demonstrate non-obvious combinations of known techniques. However, certain component techniques---including retrieval based on multi-modal similarity scoring and task construction from personal context---appear in multiple prior disclosures and will require careful claim drafting to establish non-obviousness through novel combination and application.
+
+\textit{Identified Prior Art Clusters:} Relevant prior art includes digital twin platforms for personal AI agents (e.g., MindBank AI), context-aware personalization systems, multi-agent filtering architectures for retrieval, and hybrid on-device/cloud AI routing systems. Patent filings on AI agent management systems, contextual conversational interaction, and AI-powered data security present closest prior art but address distinct technical problems without anticipating Sims Technology's unified approach.
+
+\textbf{IP Strategy:}
+Year 1 priorities include converting the provisional patent to utility patent applications with claims structured to emphasize the novel combination of on-device Sim construction, context-aware retrieval, and privacy-preserving personalization. We will budget up to \$50,000 for patent prosecution costs as permitted under NSF TTP-T guidelines, with allocation prioritizing claims on the highest-novelty innovations identified in the landscape analysis.
+
+Freedom-to-operate analysis will build on the preliminary landscape search to map potential infringement risks from key patent holders in adjacent spaces, including major technology companies (Apple, Google, Amazon, Microsoft) with voice assistant portfolios and specialized AI companies with personalization patents. Design-around strategies will be developed for any identified risks prior to commercial deployment.
+
+Defensive publication strategy supplements patent protection by establishing prior art for innovations we choose not to patent, preventing competitors from obtaining blocking patents on complementary techniques.
+
+\vspace*{-8pt}
+\section{Project Team}
+\label{sec:team}
+
+\vspace*{-8pt}
+\subsection{Principal Investigator}
+\vspace*{-8pt}
+\textbf{Chirag Shah}, Professor, Information School, University of Washington
+\begin{itemize}[noitemsep]
+    \item Expertise in [relevant areas: information retrieval, HCI, AI/ML]
+    \item Prior NSF funding: [relevant awards]
+    \item Track record: [publications, patents, prior commercialization]
+    \item Role: Project leadership, technical direction, stakeholder engagement
+\end{itemize}
+
+\subsection{Postdoctoral and Graduate Student Researchers}
+\vspace*{-8pt}
+\textbf{Postdoctoral Researcher} (TBD), University of Washington (Years 2--3)
+\begin{itemize}[noitemsep]
+    \item Research focus: Privacy-preserving machine learning, user study design and execution
+    \item Role: Lead privacy architecture development, coordinate user studies, mentor graduate students
+    \item The postdoctoral researcher will join in Year 2 to lead the expanded prototype development and market validation phases, bringing expertise in privacy systems and human-subjects research
+\end{itemize}
+
+\noindent
+\textbf{Harshita Chopra}, PhD Student, Computer Science, University of Washington (Years 1--3)
+\begin{itemize}[noitemsep]
+    \item Research focus: On-device machine learning, personalization algorithms, mobile systems
+    \item Role: Core algorithm development, Sims framework implementation, prototype engineering
+    \item Entrepreneurial Lead for I-Corps training, providing continuity across all project phases
+\end{itemize}
+
+\noindent
+\textbf{Undergraduate and Master's Student Contributions.}
+PI Shah's lab currently includes multiple undergraduate and master's students actively contributing to Aria R\&D through Capstone projects and independent studies. This pipeline of student researchers will continue throughout the project duration, providing additional development capacity while offering unique educational opportunities. These students will contribute to specific technical components including mobile application development, user interface design, benchmark dataset creation, and usability testing. Participation in a technology translation project provides invaluable exposure to the full innovation lifecycle---from research prototype to commercial product---preparing students for careers in technology entrepreneurship and product development.
+
+\subsection{Advisory Support}
+\vspace*{-8pt}
+The project benefits from two experienced industry mentors who are already actively supporting commercialization efforts through their professional networks and decades of technology industry experience.
+
+\noindent
+\textbf{Steve Magennis}, Founder, PolyWug
+\begin{itemize}[noitemsep]
+    \item Experience: Former executive at Avanade (Microsoft – Accenture Joint Venture) with extensive experience in enterprise technology sales, strategy and solution development
+    \item Role: Market strategy guidance, enterprise partnership development, startup formation guidance
+\end{itemize}
+
+\noindent
+\textbf{Ross Shabalin}, Technology Executive
+\begin{itemize}[noitemsep]
+    \item Experience: Senior roles at Amazon, Boeing, and Microsoft spanning product development, engineering leadership, and technology commercialization
+    \item Role: Technical commercialization strategy, investor network access, industry mentor for I-Corps training
+\end{itemize}
+
+\noindent
+Both advisors bring complementary expertise critical for successful technology translation: Magennis contributes deep enterprise sales and consulting experience, while Shabalin provides product development and engineering leadership perspective from multiple Fortune 500 technology companies. Their combined networks span potential enterprise customers, strategic partners, and investment sources relevant to Aria's commercialization pathway.
+
+\subsection{Collaborators and Partners}
+\vspace*{-8pt}
+\begin{itemize}[noitemsep]
+    \item \textbf{AMD (NSF Catalyst Partner):} AMD's Responsible AI Lead 
+    provides strategic guidance on hardware-software co-optimization for 
+    privacy-preserving edge AI. AMD contributes access to Ryzen AI development 
+    platforms, technical consultation on heterogeneous compute optimization, 
+    and industry perspective on enterprise deployment requirements.
+    \item \textbf{UW CoMotion:} University of Washington's technology transfer 
+    office provides intellectual property management, licensing support, and 
+    startup formation resources
+    \item \textbf{UW Foster School of Business:} Collaboration on market 
+    analysis and business model development through MBA student projects
+\end{itemize}
+
+\vspace*{-8pt}
+\section{Broader Impacts}
+\label{sec:impacts}
+\vspace*{-8pt}
+This section articulates the broader impacts of the proposed research beyond its 
+technical contributions, addressing economic benefits, educational outcomes, 
+diversity initiatives, and the post-award commercialization pathway.
+
+\vspace*{-8pt}
+\subsection{Economic and Societal Benefits}
+\vspace*{-8pt}
+\textbf{Economic Impact.}
+The proposed work will generate significant economic benefits at regional and 
+national levels. Startup formation is expected to create 5--10 high-skilled 
+positions within three years post-award, with growth potential to 25--50 
+employees within five years of commercial launch. These positions will span 
+machine learning engineering, privacy systems architecture, user experience 
+design, and business development, contributing to the regional technology 
+workforce. The project strengthens Seattle's position as a hub for AI innovation 
+and supports regional economic development initiatives. Beyond direct employment, 
+the technology has potential to shift the personal AI market toward 
+privacy-respecting alternatives, challenging the prevailing surveillance-based 
+business models that currently dominate the intelligent virtual assistant space.
+
+\textbf{Societal Impact.}
+The proposed Aria system addresses fundamental concerns about individual agency 
+in the digital age. Research has demonstrated that data sovereignty encompasses 
+meaningful control, ownership, and claims to data articulated by agents ranging 
+from individuals to entire societies~\cite{hummel2021data}. By processing all 
+personal information on-device, Aria empowers users to maintain genuine control 
+over their digital footprint without sacrificing the benefits of AI-powered 
+assistance. This approach directly addresses the tension between technological 
+convenience and privacy preservation that affects millions of potential users.
+
+Furthermore, the project contributes to rebuilding public trust in AI systems. 
+Large-scale surveys indicate that a majority of individuals express wariness 
+about trusting AI systems, with privacy and data governance consistently ranked 
+among the most important factors for establishing trust~\cite{gillespie2023trust}. 
+By demonstrating a viable alternative to cloud-dependent AI assistants, this 
+research provides evidence that privacy-preserving personalization is technically 
+achievable and commercially viable.
+
+The technology also enables AI assistance in sensitive domains---including 
+healthcare, legal services, and financial planning---where privacy concerns 
+currently limit adoption. Users in these contexts require assurance that their 
+interactions remain confidential, a guarantee that on-device processing can 
+provide but cloud-based alternatives cannot.
+
+\vspace*{-8pt}
+\subsection{Educational and Training Outcomes}
+\vspace*{-8pt}
+\textbf{Graduate Student Development.}
+The PhD student participating in this project will receive comprehensive 
+training that bridges technical research and entrepreneurial practice. The 
+mandatory I-Corps program provides experiential learning in customer discovery, 
+market validation, and business model development---competencies increasingly 
+essential for researchers seeking to translate their work into societal 
+impact~\cite{duval2020training}. The I-Corps curriculum, which has facilitated 
+the launch of over 1,000 startups nationally, uses the Lean LaunchPad methodology 
+to help researchers evaluate commercial opportunities through direct engagement 
+with potential customers and industry stakeholders.
+
+Beyond formal I-Corps training, the graduate student and postdoctoral researcher gain hands-on experience in technology 
+commercialization, intellectual property strategy, and startup formation. 
+Mentorship from industry advisors Magennis and Shabalin, combined with support from technology transfer specialists, 
+provides exposure to the practical challenges of bringing academic research to 
+market. Students who complete the project will be well-positioned to transition 
+into startup employment, pursue entrepreneurial ventures of their own, or bring 
+commercialization expertise to academic or industry research positions.
+
+\textbf{Undergraduate and Master's Student Training.}
+The project creates substantial research opportunities for undergraduate and master's students through Capstone projects and independent studies. PI Shah's lab currently supports multiple students contributing to Aria R\&D, and this engagement will continue throughout the project. Students will work on well-defined technical components---including mobile application development, user interface implementation, dataset curation, and usability testing---under graduate student and postdoctoral supervision. This tiered mentorship model provides undergraduates with accessible entry points to cutting-edge AI research while developing the graduate students' mentorship capabilities. Participation exposes students to the complete innovation lifecycle from research prototype to commercial product, providing preparation for careers in technology entrepreneurship that few academic experiences can match.
+
+\textbf{Broader Educational Contributions.}
+Insights from this project will inform course materials in privacy-preserving 
+machine learning, mobile systems design, and technology entrepreneurship. Open-source components developed 
+during the project---including on-device inference frameworks and privacy 
+evaluation tools---will be made available for educational use, enabling other 
+institutions to incorporate these materials into their curricula.
+
+\vspace*{-8pt}
+\subsection{Broadening Participation}
+\vspace*{-8pt}
+The project maintains a strong commitment to diversity, equity, and inclusion 
+throughout all activities. Research demonstrates that women and racial minorities 
+remain significantly underrepresented in STEM fields, particularly in computer 
+science and engineering, where systemic barriers continue to limit 
+participation~\cite{rincon2023inclusion}. To address these disparities, the 
+project implements several targeted initiatives.
+
+Recruitment efforts will actively seek team members from underrepresented groups, 
+leveraging partnerships with campus diversity programs and professional 
+organizations focused on broadening participation in computing. User studies will 
+be explicitly designed to include participants from diverse demographic 
+backgrounds, ensuring that the technology meets the needs of varied user 
+populations rather than reflecting the preferences of a narrow demographic 
+segment. Accessibility considerations will be integrated into product design from 
+the earliest stages, following universal design principles that benefit users 
+with disabilities while improving usability for all users.
+
+Outreach activities will engage minority-serving institutions for potential 
+collaboration, creating pathways for students from these institutions to 
+participate in project activities. These efforts align with NSF's broader goals 
+of developing a diverse, globally competitive STEM workforce.
+
+\vspace*{-8pt}
+\subsection{Responsible AI Development}
+\vspace*{-8pt}
+The project embraces principles of responsible AI development, recognizing that 
+ethical considerations must be integrated throughout the technology lifecycle. 
+Researchers have proposed unified frameworks emphasizing beneficence, 
+non-maleficence, autonomy, justice, and explicability as foundational principles 
+for AI systems that serve societal good~\cite{floridi2019unified}. The Aria 
+system operationalizes these principles through its privacy-first architecture, 
+which respects user autonomy by keeping personal data under individual control 
+and promotes justice by making personalized AI assistance accessible without 
+requiring users to surrender their privacy.
+
+Transparency mechanisms will be built into the system to help users understand 
+how their Sims Technology profiles influence AI recommendations. This 
+explicability supports informed consent and enables users to modify or constrain 
+the system's behavior according to their preferences. Regular ethical reviews 
+will assess the technology's alignment with responsible AI principles as 
+development progresses.
+
+\vspace*{-8pt}
+\subsection{Post-Award Commercialization Pathway}
+\vspace*{-8pt}
+\textbf{Anticipated Next Steps.}
+The project establishes a clear pathway from research to commercial impact:
+
+\begin{enumerate}[noitemsep]
+    \item \textbf{Startup Formation (Target: Month 24):} Incorporate NxTAGE as a 
+    commercial entity, with initial focus on direct-to-consumer market validation.
+    
+    \item \textbf{Seed Investment (Months 24--30):} Pursue angel and venture 
+    capital investment based on demonstrated user traction and validated 
+    product-market fit from beta deployments.
+    
+    \item \textbf{NSF SBIR/STTR (Months 30--36):} Submit Phase I application for 
+    continued development funding, leveraging I-Corps completion and 
+    commercialization progress as evidence of commercial potential.
+    
+    \item \textbf{Strategic Partnerships (Months 30--36):} Formalize relationships 
+    with device manufacturers, enterprise customers, or complementary technology 
+    providers identified through market validation activities.
+    
+    \item \textbf{Accelerator Programs:} Apply to relevant technology accelerators 
+    (e.g., Y Combinator, Techstars) to accelerate growth and expand investor 
+    networks.
+\end{enumerate}
+
+Success in these activities will position NxTAGE to pursue Series A funding and scale operations to meet market demand for privacy-respecting AI assistance. The combination of technical differentiation, validated market opportunity, and experienced team provides a foundation for sustainable commercial growth while maintaining the privacy-first principles that define the technology's value proposition.
+
+\vspace*{-8pt}
+\section{Results of Prior NSF Support}
+\label{sec:prior}
+\vspace*{-8pt}
+{\bf Shah} was supported under \textbf{III-1717488}  (09/17-08/22; \$500k) as PI. The project developed proactive recommendation systems and CIS methodologies directly applicable to SYNAPSE. \textbf{IM:} This research established theoretical foundations for proactive agent behavior \cite{shah2018information} and developed techniques for collaborative task identification \cite{mitsui2018much, mitsui2018broad} that inform the CIN component of SYNAPSE. \textbf{BI:} The project enhanced the Coagmento collaborative search platform \cite{mitsui2018coagmento}, providing infrastructure foundations for the multi-processor evaluation methodologies proposed in SYNAPSE. Additionally, in {\bf III-1910154} (10/19-04/23; \$500k) as Co-PI, Shah developed explanation generation frameworks and studied their effectiveness in human-agent interactions \cite{fu2020fairness, verma2024counterfactual}, contributing essential groundwork for the trust mechanisms and transparency requirements in collaborative intelligence systems. Shah serves as co-PI on \textbf{III-2336769} and \textbf{CPS-2438935} planning grant, both recently initiated projects that complement the proposed project's objectives.
+
+\textbf{Relation to Proposed Work:}
+The proposed Aria project directly extends [specific findings] from this 
+prior award, translating the fundamental research on [topic] into a 
+commercial product addressing [market need].
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% END OF PROJECT DESCRIPTION (15 pages)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% SUPPLEMENTARY MATERIALS CHECKLIST
+% (These are separate submission components, not part of 15-page limit)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \section*{Submission Checklist}
+
+% \subsection*{Required Components}
+% \begin{itemize}
+%     \item[$\square$] Cover Sheet (title must start with ``NSF TTP-T:'')
+%     \item[$\square$] Project Summary (1 page)
+%     \item[$\square$] Project Description (15 pages max)
+%     \item[$\square$] References Cited
+%     \item[$\square$] Biographical Sketch(es)
+%     \item[$\square$] Budget and Budget Justification
+%     \item[$\square$] Current and Pending Support
+%     \item[$\square$] Facilities, Equipment, and Other Resources
+%     \item[$\square$] Data Management and Sharing Plan (2 pages max)
+% \end{itemize}
+
+% \subsection*{Optional Components}
+% \begin{itemize}
+%     \item[$\square$] Letters of Collaboration (if partners)
+%     \item[$\square$] Resubmission Change Description (if applicable, 2 pages max)
+% \end{itemize}
+
+% \subsection*{Budget Reminders}
+% \begin{itemize}
+%     \item[$\square$] I-Corps training: \$45,000 on Line G.6, \$5,000 indirect (Year 1)
+%     \item[$\square$] PI Meeting travel: \$2,500/person for PI + 1 student (Year 2)
+%     \item[$\square$] Patent expenses: Up to \$50,000 total (optional)
+%     \item[$\square$] Total budget $\leq$ \$1,200,000
+% \end{itemize}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % BUDGET TEMPLATE
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\newpage
+\setcounter{page}{1}
+\bibliographystyle{plain}
+\bibliography{references}
+\end{document}

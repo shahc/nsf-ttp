@@ -1,0 +1,61 @@
+\begin{center}
+{\Large {Data Management Plan}}
+\end{center}
+\vspace*{-12pt}
+\paragraph{Types of Data}
+
+This project will generate and utilize multiple data types through user studies and technical evaluation activities. New data will be collected through three primary phases: (1) Phase 1 user studies evaluating Sims technology feasibility with approximately 50 participants during Year 1; (2) expanded prototype testing with approximately 200 participants across diverse demographics during Year 2, including longitudinal usage studies spanning 4--8 weeks; and (3) beta deployment validation with up to 1,000 early adopters and enterprise pilots with 2--3 partner organizations during Year 3. Data types include: encrypted on-device interaction logs capturing user-assistant exchanges; context detection accuracy measurements and system performance metrics (latency, memory usage, battery impact); survey responses measuring user trust, satisfaction, and privacy perceptions using validated instruments including the Short Trust in Automation Scale; semi-structured interview transcripts from qualitative usability assessments; and system telemetry data collected through privacy-preserving on-device analytics. Combined data volume is estimated at 12GB across the project duration, with the majority comprising anonymized survey data, performance metrics, and de-identified interview transcripts. The project's privacy-first architecture ensures that raw interaction data remains exclusively on participant devices and is never transmitted to research infrastructure.
+
+\vspace*{-12pt}
+\paragraph{Metadata Standards}
+
+Metadata documentation will follow established scientific data management principles that emphasize findability, accessibility, interoperability, and reusability \cite{wilkinson2016fair}. Core metadata elements include: Title, Creator, Date, Format, Subject, Unique Identifier, Privacy Level Classification, and Description. Additional research-specific metadata comprises: Data Collection Phase (Phase 1/2/3), Participant Consent Status, IRB Protocol Reference, Collection Method (survey, interview, telemetry), Anonymization Technique Applied, and Retention Period. Survey data will be maintained in standard formats (CSV, SPSS) with accompanying codebooks documenting variable definitions, response scales, and validation instrument references. Interview transcripts will be stored as de-identified text files with timestamps removed. System performance data will use JSON format with schema documentation enabling reproducibility. Privacy-related metadata will explicitly document any differential privacy parameters applied, following emerging best practices for privacy-preserving data release \cite{dwork2014algorithmic}.
+
+\vspace*{-12pt}
+\paragraph{Policies for Access, Sharing, and Privacy}
+
+Data access and sharing policies reflect the project's core commitment to privacy-preserving technology. In accordance with federal regulations governing human subjects research, all data collection activities will receive Institutional Review Board approval prior to participant recruitment \cite{45cfr46}. The project implements a tiered data access model: Level 1 (Public) includes aggregated statistics, anonymized performance benchmarks, and published results; Level 2 (Restricted) includes de-identified survey responses and interview transcripts available to approved collaborators under data use agreements; Level 3 (Confidential) includes any data with potential re-identification risk, accessible only to IRB-approved project personnel.
+
+Critical to the project's design, raw user interaction data with the Aria assistant will never leave participant devices and will never be accessible to researchers. This architectural constraint eliminates the privacy-utility trade-off that typically complicates human subjects research with AI systems. Participant recruitment materials will clearly communicate this distinction. De-identification procedures for shareable data will employ established statistical disclosure limitation techniques, removing direct identifiers and applying appropriate generalization to quasi-identifiers. Participant identifiers will be replaced with randomly generated codes using cryptographically secure methods, with linking keys stored separately from research data in access-controlled systems.
+
+\vspace*{-12pt}
+\paragraph{Policies for Re-use, Re-distribution, and Derivatives}
+
+Research outputs will be disseminated through peer-reviewed publications with supplementary materials enabling result verification. Open-source software components, including on-device inference frameworks, context detection algorithms, and privacy evaluation tools, will be released under permissive licenses (Apache 2.0 or MIT) through GitHub repositories with comprehensive documentation. Aggregated benchmark datasets demonstrating system performance will be made available to support reproducible research in privacy-preserving AI.
+
+The project will produce educational materials including curriculum modules on privacy-preserving machine learning and technology entrepreneurship, released under Creative Commons Attribution licenses (CC-BY 4.0). Reference implementations enabling other researchers to evaluate privacy-preserving personalization approaches will be documented and made publicly available. Due to the privacy-sensitive nature of human subjects data, individual-level responses and interview transcripts will not be redistributed beyond approved collaborators operating under data use agreements. The PI will ensure sufficient methodological detail is published to enable independent replication of key findings while maintaining participant confidentiality.
+
+\vspace*{-12pt}
+\paragraph{Plans for Archiving and Preservation}
+
+Data archiving follows University of Washington institutional policies and NSF requirements for research data retention. De-identified datasets, analysis code, and documentation will be deposited in the UW ResearchWorks Archive, an institutional repository providing long-term preservation with persistent digital object identifiers (DOIs). Survey instruments, codebooks, and methodological documentation will be archived alongside data to support future secondary analysis.
+
+Primary data storage utilizes university-managed encrypted systems with automated backup procedures. Research data will be retained for a minimum of three years following project completion, or longer as required by specific IRB protocols or publication journal policies. Linking keys enabling re-identification will be destroyed upon completion of data collection phases and final dataset validation, rendering archived data permanently de-identified. Open-source code repositories will be maintained through version control systems (Git) with tagged releases corresponding to published results, ensuring computational reproducibility. Performance benchmark datasets will be preserved in standard formats compatible with common statistical and machine learning software environments.
+
+\vspace*{-12pt}
+\paragraph{Roles and Responsibilities}
+
+The PI maintains overall responsibility for data management plan implementation, compliance monitoring, and annual review. The PI will conduct quarterly assessments of data security practices and ensure all team members complete required human subjects research training prior to data access. The postdoctoral researcher (Years 2--3) will oversee day-to-day data collection protocols, participant recruitment and consent procedures, and coordinate with the University IRB for protocol amendments. The PhD student will manage technical data collection systems, maintain data processing pipelines, and ensure software documentation standards. Undergraduate and master's students participating through Capstone projects will work exclusively with de-identified datasets under direct supervision, completing appropriate training before data access.
+
+University IT security resources will provide infrastructure support including encrypted storage provisioning and backup system management. The University of Washington Human Subjects Division will provide ongoing oversight of IRB compliance. For enterprise pilot deployments in Year 3, data management procedures will be documented in collaboration agreements specifying data handling responsibilities, retention requirements, and confidentiality obligations. All team members will sign confidentiality agreements acknowledging their responsibilities for protecting research participant privacy.
+
+\vspace*{-12pt}
+\bibliographystyle{plain}
+\begin{thebibliography}{9}
+
+\bibitem{wilkinson2016fair}
+M.~D. Wilkinson, M.~Dumontier, I.~J. Aalbersberg, G.~Appleton, M.~Axton, A.~Baak, N.~Blomberg, J.-W. Boiten, L.~B. da~Silva~Santos, P.~E. Bourne, et~al.
+\newblock The {FAIR} guiding principles for scientific data management and stewardship.
+\newblock {\em Scientific Data}, 3:160018, 2016.
+
+\bibitem{dwork2014algorithmic}
+C.~Dwork and A.~Roth.
+\newblock The algorithmic foundations of differential privacy.
+\newblock {\em Foundations and Trends in Theoretical Computer Science}, 9(3--4):211--407, 2014.
+
+\bibitem{45cfr46}
+{U.S. Department of Health and Human Services}.
+\newblock Protection of human subjects.
+\newblock {\em 45 CFR Part 46}, 2018.
+
+\end{thebibliography}
